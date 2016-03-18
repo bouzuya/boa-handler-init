@@ -2,7 +2,7 @@
 // HTTPResponseAction -> HTTP response
 
 import { A, O, Handler } from 'b-o-a';
-import { HTML } from 'boajs-vdom';
+import { create, HTML } from 'boajs-vdom';
 import { init as makeRouter, Route } from 'boajs-router';
 import * as express from 'express';
 
@@ -80,7 +80,7 @@ const init = (options: HTTPOptions): InitResponse => {
             const { status, path } = error;
             response.send(error.message);
           } else {
-            const vtree = render(state, { e: (): void => null });
+            const vtree = render(state, { create, e: (): void => null });
             const rendered = renderToHTML(vtree);
             const { result: html } = rendered;
             renderToHTML = rendered.render;
