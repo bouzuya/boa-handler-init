@@ -1,11 +1,13 @@
-# boajs-handler-init
+# boa-handler-init
 
 A [b-o-a][bouzuya/b-o-a] handler for initializing in server-side.
+
+[bouzuya/b-o-a]: https://github.com/bouzuya/b-o-a
 
 ## Installation
 
 ```
-$ npm install boajs-handler-init
+$ npm install boa-handler-init
 ```
 
 ## Badges
@@ -23,6 +25,5 @@ $ npm install boajs-handler-init
 [user]: https://github.com/bouzuya
 [email]: mailto:m@bouzuya.net
 [url]: http://bouzuya.net
-[bouzuya/b-o-a]: https://github.com/bouzuya/b-o-a
-[circleci-badge-url]: https://circleci.com/gh/bouzuya/boajs-handler-init.svg?style=svg
-[circleci-url]: https://circleci.com/gh/bouzuya/boajs-handler-init
+[circleci-badge-url]: https://circleci.com/gh/bouzuya/boa-handler-init.svg?style=svg
+[circleci-url]: https://circleci.com/gh/bouzuya/boa-handler-init

@@ -1,5 +1,5 @@
 {
-  "name": "boajs-handler-init",
+  "name": "boa-handler-init",
   "description": "A b-o-a handler for initializing in server-side",
   "version": "0.2.0",
   "author": {
@@ -16,7 +16,7 @@
     ]
   },
   "bugs": {
-    "url": "https://github.com/bouzuya/boajs-handler-init/issues"
+    "url": "https://github.com/bouzuya/boa-handler-init/issues"
   },
   "dependencies": {
     "b-o-a": "0.4.0",
@@ -36,13 +36,13 @@
   "files": [
     "lib"
   ],
-  "homepage": "https://github.com/bouzuya/boajs-handler-init#readme",
+  "homepage": "https://github.com/bouzuya/boa-handler-init#readme",
   "keywords": [],
   "license": "MIT",
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bouzuya/boajs-handler-init"
+    "url": "https://github.com/bouzuya/boa-handler-init"
   },
   "scripts": {
     "build": "tsc && npm run cp",
