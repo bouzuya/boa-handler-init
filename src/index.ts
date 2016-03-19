@@ -1,9 +1,9 @@
 // HTTP request -> HttpRequestAction
 // HTTPResponseAction -> HTTP response
 
-import { A, O, Handler } from 'b-o-a';
-import { create, HTML } from 'boajs-vdom';
-import { init as makeRouter, Route } from 'boajs-router';
+import { A, O, Handler } from 'boa-core';
+import { create, HTML } from 'boa-vdom';
+import { init as makeRouter, Route } from 'boa-router';
 import * as express from 'express';
 
 const runServer = (

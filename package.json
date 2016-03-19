@@ -19,9 +19,9 @@
     "url": "https://github.com/bouzuya/boa-handler-init/issues"
   },
   "dependencies": {
-    "b-o-a": "0.4.0",
-    "boajs-router": "0.3.0",
-    "boajs-vdom": "0.1.1",
+    "boa-core": "0.6.1",
+    "boa-router": "0.4.0",
+    "boa-vdom": "0.2.0",
     "express": "4.13.4"
   },
   "devDependencies": {
