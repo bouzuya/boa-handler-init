@@ -1,7 +1,7 @@
 {
   "name": "boa-handler-init",
   "description": "A b-o-a handler for initializing in server-side",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "author": {
     "name": "bouzuya",
     "email": "m@bouzuya.net",
