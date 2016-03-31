@@ -19,7 +19,7 @@
     "url": "https://github.com/bouzuya/boa-handler-init/issues"
   },
   "dependencies": {
-    "boa-core": "0.6.2",
+    "boa-core": "0.7.0",
     "boa-router": "0.4.0",
     "boa-vdom": "0.2.0",
     "express": "4.13.4"
