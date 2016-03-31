@@ -54,45 +54,44 @@ const init = (options: HTTPOptions): InitResponse => {
   const httpResponseType = httpResponseActionType
     ? httpResponseActionType
     : 'http-response';
-  return {
-    handler: (action$: O<A<any>>, options: any) => {
-      const { re } = options;
-      let renderToHTML = makeRender();
-      return O.merge(
-        action$.first().map(() => {
-          const proc = (request: any, response: any) => {
-            const { route, params } = http(request.path);
-            re({
-              type: httpRequestType,
-              data: { route, params, http: { request, response } }
-            });
-          };
-          runServer(dir, middlewares, port, proc);
-          return; // return undefined
-        }),
-        action$.map(action => {
-          if (action.type !== httpResponseType) return action;
-          const { error, state, http: { response } } = action.data;
-          if (error && error.message === 'redirect') {
-            const { status, path } = error;
-            response.redirect(status, path);
-          } else if (error) {
-            const { status, path } = error;
-            response.send(error.message);
-          } else {
-            const vtree = render(state, { create, e: (): void => null });
-            const rendered = renderToHTML(vtree);
-            const { result: html } = rendered;
-            renderToHTML = rendered.render;
-            response.send(html);
-          }
-          return; // return undefined
-        })
-      )
-        .filter(a => !!a)
-        .share();
-    }
+  const handler = (action$: O<A<any>>, options: any): O<A<any>> => {
+    const { re } = options;
+    let renderToHTML = makeRender();
+    return O.merge<A<any>>(
+      action$.first().map((): A<any> => {
+        const proc = (request: any, response: any) => {
+          const { route, params } = http(request.path);
+          re({
+            type: httpRequestType,
+            data: { route, params, http: { request, response } }
+          });
+        };
+        runServer(dir, middlewares, port, proc);
+        return; // return undefined
+      }),
+      action$.map(action => {
+        if (action.type !== httpResponseType) return action;
+        const { error, state, http: { response } } = action.data;
+        if (error && error.message === 'redirect') {
+          const { status, path } = error;
+          response.redirect(status, path);
+        } else if (error) {
+          const { status, path } = error;
+          response.send(error.message);
+        } else {
+          const vtree = render(state, { create, e: (): void => null });
+          const rendered = renderToHTML(vtree);
+          const { result: html } = rendered;
+          renderToHTML = rendered.render;
+          response.send(html);
+        }
+        return; // return undefined
+      })
+    )
+      .filter(a => !!a)
+      .share();
   };
+  return { handler };
 };
 
 export { init };
