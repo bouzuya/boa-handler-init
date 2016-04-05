@@ -56,22 +56,24 @@ const init = (options: HTTPOptions): InitResponse => {
     : 'http-response';
   const handler = (action$: O<A<any>>, options: any): O<A<any>> => {
     const { re } = options;
+    let start = false;
     let renderToHTML = makeRender();
-    return O.merge<A<any>>(
-      action$.first().map((): A<any> => {
-        const proc = (request: any, response: any) => {
-          const { route, params } = http(request.path);
-          re({
-            type: httpRequestType,
-            data: { route, params, http: { request, response } }
-          });
-        };
-        runServer(dir, middlewares, port, proc);
-        return; // return undefined
-      }),
-      action$.map(action => {
-        if (action.type !== httpResponseType) return action;
-        const { error, state, http: { response } } = action.data;
+    return action$
+      .do(() => {
+        if (!start) {
+          start = true;
+          const proc = (request: any, response: any) => {
+            const { route, params } = http(request.path);
+            re({
+              type: httpRequestType,
+              data: { route, params, http: { request, response } }
+            });
+          };
+          setTimeout(() => runServer(dir, middlewares, port, proc), 0);
+        }
+      })
+      .filter(action => action.type === httpResponseType)
+      .do(({ data: { error, state, http: { response } } }) => {
         if (error && error.message === 'redirect') {
           const { status, path } = error;
           response.redirect(status, path);
@@ -85,10 +87,8 @@ const init = (options: HTTPOptions): InitResponse => {
           renderToHTML = rendered.render;
           response.send(html);
         }
-        return; // return undefined
       })
-    )
-      .filter(a => !!a)
+      .filter(() => false)
       .share();
   };
   return { handler };
