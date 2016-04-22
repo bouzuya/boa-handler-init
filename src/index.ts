@@ -5,6 +5,9 @@ import { A, O, Handler } from 'boa-core';
 import { create, HTML } from 'boa-vdom';
 import { init as makeRouter, Route } from 'boa-router';
 import * as express from 'express';
+import { _do } from 'rxjs/operator/do';
+import { filter } from 'rxjs/operator/filter';
+import { share } from 'rxjs/operator/share';
 
 const runServer = (
   dir: string,
@@ -58,38 +61,47 @@ const init = (options: HTTPOptions): InitResponse => {
     const { re } = options;
     let start = false;
     let renderToHTML = makeRender();
-    return action$
-      .do(() => {
-        if (!start) {
-          start = true;
-          const proc = (request: any, response: any) => {
-            const { route, params } = http(request.path);
-            re({
-              type: httpRequestType,
-              data: { route, params, http: { request, response } }
-            });
-          };
-          setTimeout(() => runServer(dir, middlewares, port, proc), 0);
-        }
-      })
-      .filter(action => action.type === httpResponseType)
-      .do(({ data: { error, state, http: { response } } }) => {
-        if (error && error.message === 'redirect') {
-          const { status, path } = error;
-          response.redirect(status, path);
-        } else if (error) {
-          const { status, path } = error;
-          response.send(error.message);
-        } else {
-          const vtree = render(state, { create, e: (): void => null });
-          const rendered = renderToHTML(vtree);
-          const { result: html } = rendered;
-          renderToHTML = rendered.render;
-          response.send(html);
-        }
-      })
-      .filter(() => false)
-      .share();
+    return share.call(
+      filter.call(
+        _do.call(
+          filter.call(
+            _do.call(
+              action$,
+              () => {
+                if (!start) {
+                  start = true;
+                  const proc = (request: any, response: any) => {
+                    const { route, params } = http(request.path);
+                    re({
+                      type: httpRequestType,
+                      data: { route, params, http: { request, response } }
+                    });
+                  };
+                  setTimeout(() => runServer(dir, middlewares, port, proc), 0);
+                }
+              }
+            ),
+            (action: A<any>): boolean => action.type === httpResponseType
+          ),
+          ({ data: { error, state, http: { response } } }) => {
+            if (error && error.message === 'redirect') {
+              const { status, path } = error;
+              response.redirect(status, path);
+            } else if (error) {
+              const { status, path } = error;
+              response.send(error.message);
+            } else {
+              const vtree = render(state, { create, e: (): void => null });
+              const rendered = renderToHTML(vtree);
+              const { result: html } = rendered;
+              renderToHTML = rendered.render;
+              response.send(html);
+            }
+          }
+        ),
+        () => false
+      )
+    );
   };
   return { handler };
 };
